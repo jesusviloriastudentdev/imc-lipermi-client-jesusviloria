@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package jesusviloria.calpin.vistas;
+package jesusviloria.imc.vistas;
 
 import java.awt.Color;
 import java.io.DataInputStream;
@@ -13,10 +13,10 @@ import java.io.DataOutputStream;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import jesusviloria.calpin.rmi.lib.DatosCalPin;
-import jesusviloria.calpin.rmi.lib.IRemotaCalPin;
+import jesusviloria.imc.rmi.lib.DatosImc;
 import net.sf.lipermi.handler.CallHandler;
 import net.sf.lipermi.net.Client;
+import jesusviloria.imc.rmi.lib.IRemotaCalculoImc;
 
 /**
  *
@@ -26,7 +26,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
 
-    
     Socket servidor;
     DataOutputStream out;
     DataInputStream in;
@@ -58,17 +57,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtEstado = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btnCalculate = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        campoLargo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        campoAncho = new javax.swing.JTextField();
+        campoPeso = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtResultado = new javax.swing.JLabel();
         txtMensaje = new javax.swing.JLabel();
         campoAltura = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        campoRendimiento = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         txtEstado1 = new javax.swing.JLabel();
 
@@ -149,19 +144,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnCalculate.setBackground(new java.awt.Color(204, 204, 204));
         btnCalculate.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         btnCalculate.setForeground(new java.awt.Color(255, 51, 51));
-        btnCalculate.setText("CALCULAR PINTURA NECESARIA");
+        btnCalculate.setText("CALCULAR IMC");
         btnCalculate.addActionListener(this::btnCalculateActionPerformed);
 
-        jLabel5.setFont(new java.awt.Font("Hiragino Sans", 0, 13)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("LARGO (m)");
-
-        campoLargo.addActionListener(this::campoLargoActionPerformed);
-
         jLabel6.setFont(new java.awt.Font("Hiragino Sans", 0, 13)); // NOI18N
-        jLabel6.setText("ANCHO (m)");
+        jLabel6.setText("PESO");
 
-        campoAncho.addActionListener(this::campoAnchoActionPerformed);
+        campoPeso.addActionListener(this::campoPesoActionPerformed);
 
         jLabel7.setText("Resultado:");
 
@@ -175,12 +164,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         campoAltura.addActionListener(this::campoAlturaActionPerformed);
 
         jLabel8.setFont(new java.awt.Font("Hiragino Sans", 0, 13)); // NOI18N
-        jLabel8.setText("ALTURA (m)");
-
-        jLabel9.setFont(new java.awt.Font("Hiragino Sans", 0, 13)); // NOI18N
-        jLabel9.setText("RENDIMIENTO (m²/L)");
-
-        campoRendimiento.addActionListener(this::campoRendimientoActionPerformed);
+        jLabel8.setText("ALTURA");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -189,23 +173,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
-                    .addComponent(campoLargo))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(campoAncho))
+                    .addComponent(campoPeso))
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(campoAltura, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(campoRendimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(39, 39, 39))
+                .addGap(201, 201, 201))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -223,16 +197,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoRendimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(campoAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoAncho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoLargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnCalculate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
@@ -247,11 +217,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addGap(28, 28, 28))))
         );
 
-        jTabbedPane1.addTab("CALCULAR PINTURA REQUERIDA", jPanel2);
+        jTabbedPane1.addTab("CALCULAR IMC", jPanel2);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CLIENTE - PINTURA REQUERIDA");
+        jLabel1.setText("CLIENTE - IMC");
 
         txtEstado1.setForeground(new java.awt.Color(255, 51, 51));
         txtEstado1.setText("Jesús Viloria Client App");
@@ -265,12 +235,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(83, 83, 83))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(txtEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -298,7 +268,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     CallHandler invocadorRemoto;
     String ipServidor = "localhost";
     int puerto = 9007;
-    private IRemotaCalPin calculoPinturaRemoto;
+    private IRemotaCalculoImc calculoImcRemoto;
     Client cliente;
     
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
@@ -314,7 +284,7 @@ try { //[cite: 7]
                 cliente = new Client(ipServidor, puerto, invocadorRemoto); //[cite: 7]
                 
                 // ¡AQUÍ ESTÁ EL CAMBIO CLAVE! Se solicita tu interfaz de pintura al servidor
-                calculoPinturaRemoto = (IRemotaCalPin) cliente.getGlobal(IRemotaCalPin.class); 
+                calculoImcRemoto = (IRemotaCalculoImc) cliente.getGlobal(IRemotaCalculoImc.class); 
                 
                 // Actualización visual de la interfaz a modo conectado[cite: 7]
                 btnIniciar.setText("Desconectar"); //[cite: 7]
@@ -341,71 +311,53 @@ try { //[cite: 7]
 
     }//GEN-LAST:event_btnIniciarActionPerformed
 
-    private void campoLargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoLargoActionPerformed
+    private void campoPesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoPesoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_campoLargoActionPerformed
+    }//GEN-LAST:event_campoPesoActionPerformed
 
-    private void campoAnchoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoAnchoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoAnchoActionPerformed
-
-    private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
-
-      // Se capturan los valores ingresados en la interfaz gráfica
-        float largo = Float.parseFloat(campoLargo.getText()); 
-        float ancho = Float.parseFloat(campoAncho.getText());
-        float altura = Float.parseFloat(campoAltura.getText()); //[cite: 8]
-        float rendimiento = Float.parseFloat(campoRendimiento.getText());
-
-        // Se crea un hilo independiente para evitar que la interfaz gráfica se congele durante la petición de red[cite: 8]
-        Thread hilo = new Thread() {
-            @Override 
-            public void run() { 
-                try { 
-                    System.out.println("Largo: " + largo); 
-                    System.out.println("Ancho: " + ancho); 
-                    System.out.println("Altura: " + altura); 
-                    System.out.println("Rendimiento: " + rendimiento); 
-
-                    // Se instancia el objeto y se le asignan los parámetros[cite: 8]
-                    DatosCalPin datos = new DatosCalPin(); //[cite: 8]
-                    datos.setLargo(largo);
-                    datos.setAncho(ancho);
-                    datos.setAltura(altura); 
-                    datos.setRendimiento(rendimiento);
-
-                    System.out.println("Enviados los datos\nEsperando respuesta"); //[cite: 8]
-
-                    // Se invoca el método remoto del servidor a través de la interfaz RMI[cite: 8]
-                    //datos = calculoPinturaRemoto.calcularPintura(datos); 
-                    
-                    datos = calculoPinturaRemoto.calcularPintura(datos);
-
-                    System.out.println("Área Total: " + datos.getAreaTotal() +
-                                       "\nLitros Requeridos: " + datos.getLitrosRequeridos()); //[cite: 8]
-
-                    // Se actualizan los campos de texto de la interfaz con los resultados obtenidos[cite: 8]
-                   // txtAreaTotal.setText(datos.getAreaTotal() + ""); //[cite: 8]
-                    //txtLitrosRequeridos.setText(datos.getLitrosRequeridos() + ""); //[cite: 8]
-                    
-                      txtResultado.setText(String.format("%.2f L", datos.getLitrosRequeridos())); 
-     
-                      txtMensaje.setText("Litros requeridos. ");
-
-
-                } catch (Exception ex) { //[cite: 8]
-                    // Se muestra un cuadro de diálogo al usuario y se imprime el error en consola en caso de fallo[cite: 8]
-                    
-                    JOptionPane.showMessageDialog(VentanaPrincipal.this, 
-                            "ERROR con el cliente " + ex.getMessage()); //[cite: 8]
-                    
-                    System.out.println("ERROR con el cliente " + ex.getMessage()); //[cite: 8]
-                    ex.printStackTrace(); //[cite: 8]
-                } //[cite: 8]
-            } //[cite: 8]
-        }; //[cite: 8]
     
-        hilo.start(); //[cite: 8]
+    private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
+// Se capturan los valores ingresados en la interfaz gráfica
+    float peso = Float.parseFloat(campoPeso.getText()); 
+    float altura = Float.parseFloat(campoAltura.getText()); 
+
+    // Se crea un hilo independiente para evitar que la interfaz gráfica se congele durante la petición de red
+    Thread hilo = new Thread() {
+        @Override 
+        public void run() { 
+            try { 
+                System.out.println("Peso: " + peso); 
+                System.out.println("Altura: " + altura); 
+
+                // Se instancia el objeto y se le asignan los parámetros
+                DatosImc datos = new DatosImc(); 
+                datos.setPeso(peso);
+                datos.setAltura(altura); 
+
+                System.out.println("Enviados los datos\nEsperando respuesta"); 
+
+                // Se invoca el método remoto del servidor a través de la interfaz RMI
+                datos = calculoImcRemoto.calcularImc(datos);
+
+                System.out.println("IMC: " + datos.getResultado() +
+                                   "\nMensaje: " + datos.getInterpretacion()); 
+
+                // Se actualizan los campos de texto de la interfaz con los resultados obtenidos
+                txtResultado.setText(String.format("%.2f", datos.getResultado())); 
+                txtMensaje.setText(datos.getInterpretacion());
+
+            } catch (Exception ex) { 
+                // Se muestra un cuadro de diálogo al usuario y se imprime el error en consola en caso de fallo
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                        "ERROR con el cliente " + ex.getMessage()); 
+                
+                System.out.println("ERROR con el cliente " + ex.getMessage()); 
+                ex.printStackTrace(); 
+            } 
+        } 
+    }; 
+    
+    hilo.start(); 
 }
 
     
@@ -422,10 +374,6 @@ return btnIniciar;
     private void campoAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoAlturaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_campoAlturaActionPerformed
-
-    private void campoRendimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoRendimientoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoRendimientoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -482,20 +430,16 @@ java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(java.ut
     private javax.swing.JButton btnCalculate;
     private javax.swing.JButton btnIniciar;
     private javax.swing.JTextField campoAltura;
-    private javax.swing.JTextField campoAncho;
     private javax.swing.JTextField campoIPServidor;
-    private javax.swing.JTextField campoLargo;
+    private javax.swing.JTextField campoPeso;
     private javax.swing.JTextField campoPuertoServidor;
-    private javax.swing.JTextField campoRendimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
